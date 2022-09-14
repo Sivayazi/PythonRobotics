@@ -34,8 +34,8 @@ class AStarPlanner:
         self.max_x, self.max_y = 0, 0
         self.obstacle_map = None
         self.x_width, self.y_width = 0, 0
-        self.motion = self.get_motion_model()
-        self.calc_obstacle_map(ox, oy)
+        self.motion = self.get_motion_model() # Possible one step movements on grid.
+        self.calc_obstacle_map(ox, oy) # Obstacle map.
 
     class Node:
         def __init__(self, x, y, cost, parent_index):
@@ -62,6 +62,7 @@ class AStarPlanner:
             rx: x position list of the final path
             ry: y position list of the final path
         """
+        # Returns the list of Points(x, y) that robot has to visit to reach its goal.
 
         start_node = self.Node(self.calc_xy_index(sx, self.min_x),
                                self.calc_xy_index(sy, self.min_y), 0.0, -1)
@@ -105,6 +106,7 @@ class AStarPlanner:
 
             # Add it to the closed set
             closed_set[c_id] = current
+
 
             # expand_grid search grid based on motion model
             for i, _ in enumerate(self.motion):
@@ -161,6 +163,7 @@ class AStarPlanner:
         pos = index * self.resolution + min_position
         return pos
 
+    # Intial start and goal index postion on GRID.
     def calc_xy_index(self, position, min_pos):
         return round((position - min_pos) / self.resolution)
 
@@ -187,6 +190,7 @@ class AStarPlanner:
         return True
 
     def calc_obstacle_map(self, ox, oy):
+        # Returns a obstacle map where with True or False flags.
 
         self.min_x = round(min(ox))
         self.min_y = round(min(oy))
@@ -243,21 +247,33 @@ def main():
 
     # set obstacle positions
     ox, oy = [], []
+
+    # Draw black line y=-10 m on plot.
     for i in range(-10, 60):
         ox.append(i)
         oy.append(-10.0)
+    
+    # Draw black line x=60 m on plot.
     for i in range(-10, 60):
         ox.append(60.0)
         oy.append(i)
+    
+    # Draw black line y=60 m on plot.
     for i in range(-10, 61):
         ox.append(i)
         oy.append(60.0)
+    
+    # Draw black line x=-10 m on plot.
     for i in range(-10, 61):
         ox.append(-10.0)
         oy.append(i)
+
+    # Draw black line x=-20 m on plot.
     for i in range(-10, 40):
         ox.append(20.0)
         oy.append(i)
+
+    # Draw vertical line black line x=40  from y=60 to y=20 m on plot.
     for i in range(0, 40):
         ox.append(40.0)
         oy.append(60.0 - i)
@@ -280,3 +296,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+    # GRID -> Is the available coordinates on the SPACE where ROBOT/Obstacle can stand.
+    # Obstacle Map -> Is a Matrix represent all obstacles on GRID.
+
